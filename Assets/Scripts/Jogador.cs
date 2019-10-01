@@ -1,19 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Jogador : MonoBehaviour
 {
     Rigidbody rigidbody;
     Vector3 forcaAplicada;
 
-    public float intensidade = 6f;
+    public Text textoPlacar;
+    public GameObject placarFimJogo;
 
-   
-    void Start()
+    public float intensidade = 6f;
+    int pontuacao = 0;
+
+  void Update()
+  {
+    if(pontuacao == 8)
     {
-       rigidbody = GetComponent<Rigidbody>();
+      placarFimJogo.SetActive(true);
+      return;
     }
+  }   
+  void Start()
+  {
+       rigidbody = GetComponent<Rigidbody>();
+  }
   void FixedUpdate()
   {
       float horizontal = Input.GetAxis("Horizontal");
@@ -22,5 +34,12 @@ public class Jogador : MonoBehaviour
       forcaAplicada = new Vector3(horizontal, 0f, vertical);
 
       rigidbody.AddForce(forcaAplicada * intensidade);
+  }
+
+  public void OnTriggerEnter(Collider collider)
+  {
+    Destroy(collider.gameObject);
+    pontuacao ++;
+    textoPlacar.text = "Placar: " + pontuacao.ToString();
   }
 }
